@@ -6,7 +6,11 @@ require 'nhl_scrape'
 class NhlScrapeTest < Test::Unit::TestCase
 
   def setup
-    @s = NhlScrape.new
+    @s = NhlScrape.new(2010)
+  end
+
+  def test_season
+    assert_equal 2010, @s.season
   end
 
   def test_count_pages
@@ -15,13 +19,13 @@ class NhlScrapeTest < Test::Unit::TestCase
 
   def test_download_page_1
     @s.download_page(1)
-    assert File.exists?('cache/page1.html')
+    assert File.exists?('cache/page-1.html')
   end
 
   def test_download_all
     @s.download_all
-    assert File.exists?('cache/page1.html')
-    assert File.exists?("cache/page#{@s.pages}.html")
+    assert File.exists?('cache/2010/page-1.html')
+    assert File.exists?("cache/2010/page-#{@s.pages}.html")
   end
 
 end
