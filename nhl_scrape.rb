@@ -21,6 +21,7 @@ class NhlScrape
   def download_page(pg=1, cache=true)
     mech = Mechanize.new { |agent| agent.user_agent_alias = 'Mac Safari' }
     page = mech.get(URL.gsub(/YYYY/,season.to_s)+pg.to_s)
+    # TODO handle http errors
     File.open("cache/#{season}/page-#{pg}.html", 'w') { |f| f.write(page.content) } if cache
     page
   end

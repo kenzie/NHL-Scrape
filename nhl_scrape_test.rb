@@ -19,7 +19,7 @@ class NhlScrapeTest < Test::Unit::TestCase
 
   def test_download_page_1
     @s.download_page(1)
-    assert File.exists?('cache/page-1.html')
+    assert File.exists?('cache/2010/page-1.html')
   end
 
   def test_download_all
