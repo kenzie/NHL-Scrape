@@ -38,14 +38,14 @@ class NhlScrape
   end
 
   def parse_all
-    (1..pages).each do |pg|
-      parse_page(pg+1)
+    File.delete("cache/#{season}/#{datestamp}.csv") if File.exists?("cache/#{season}/#{datestamp}.csv")
+    File.open("cache/#{season}/#{datestamp}.csv", 'a') do |f|
+      (1..pages).each {|pg| f << parse_page(pg) + "\n"}
     end
-    # TODO combine csv pages
   end
 
   def parse_page(number=1)
-    # TODO download html if necessary
+    download_page(number) unless File.exists?("cache/#{season}/#{datestamp}-#{number}.html")
     file = File.read("cache/#{season}/#{datestamp}-#{number}.html")
     html = Nokogiri::HTML(file)
     table = html.css('#statsTableGoop #roundedBoxaStats table tr')
@@ -60,9 +60,7 @@ class NhlScrape
       end
       players << player.join(',')
     end
-    plyrs = players.join("\n")
-    cache_page(number, plyrs, 'csv')
-    plyrs
+    players.join("\n")
   end
 
 end
