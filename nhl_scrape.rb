@@ -7,8 +7,8 @@ class NhlScrape
 
   attr_reader :player_count, :pages, :season
 
-  def initialize(season=nil)
-    @season = season.nil? ? Time.now.year : season.to_i
+  def initialize(season=2010)
+    @season = season.to_i
     @pages = count_pages
   end
 
