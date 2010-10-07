@@ -13,19 +13,22 @@ class NhlScrapeTest < Test::Unit::TestCase
     assert_equal 2010, @s.season
   end
 
+  def test_datestamp
+    assert_equal Time.now.strftime('%Y%m%d'), @s.datestamp
+  end
+
   def test_count_pages
     assert_equal 30, @s.pages
   end
 
   def test_download_page_1
     @s.download_page(1)
-    assert File.exists?('cache/2010/page-1.html')
+    assert File.exists?("cache/#{@s.season}/#{@s.datestamp}-1.html")
   end
 
   def test_download_all
     @s.download_all
-    assert File.exists?('cache/2010/page-1.html')
-    assert File.exists?("cache/2010/page-#{@s.pages}.html")
+    assert File.exists?("cache/#{@s.season}/#{@s.datestamp}-#{@s.pages}.html")
   end
 
 end
