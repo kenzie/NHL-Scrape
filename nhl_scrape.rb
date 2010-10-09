@@ -2,6 +2,8 @@ require 'rubygems'
 require 'nokogiri'
 require 'mechanize'
 
+# TODO handle directory creation for cache files
+
 class NhlScrape
 
   URL = "http://www.nhl.com/ice/app?service=page&page=playerstats&fetchKey=YYYY2ALLAASAll&viewName=summary&sort=points&pg="
@@ -39,7 +41,7 @@ class NhlScrape
 
   def parse_all
     File.delete("cache/#{season}/#{datestamp}.csv") if File.exists?("cache/#{season}/#{datestamp}.csv")
-    File.open("cache/#{season}/#{datestamp}.csv", 'a') do |f|
+    File.open("cache/#{season}/#{datestamp}.csv", 'w') do |f|
       (1..pages).each {|pg| f << parse_page(pg) + "\n"}
     end
   end
