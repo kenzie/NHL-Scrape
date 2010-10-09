@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 Dir.chdir(File.expand_path(File.dirname(__FILE__)))
 
 require 'nhl_scrape'
