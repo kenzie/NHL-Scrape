@@ -39,7 +39,6 @@ class NhlScrape
   end
 
   def parse_all
-    File.delete("cache/#{season}/#{datestamp}.csv") if File.exists?("cache/#{season}/#{datestamp}.csv")
     File.open("cache/#{season}/#{datestamp}.csv", 'w') do |f|
       (1..pages).each {|pg| f << parse_page(pg) + "\n"}
     end
