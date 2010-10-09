@@ -2,8 +2,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'mechanize'
 
-# TODO handle directory creation for cache files
-
 class NhlScrape
 
   URL = "http://www.nhl.com/ice/app?service=page&page=playerstats&fetchKey=YYYY2ALLAASAll&viewName=summary&sort=points&pg="
@@ -21,8 +19,9 @@ class NhlScrape
     page.link_with(:text => 'Last').href.match(/\d{1,2}$/)[0].to_i
   end
 
-  def cache_page(number, page, type)
-    File.open("cache/#{season}/#{datestamp}-#{number}.#{type}", 'w') { |f| f.write(page) }
+  def cache_html(number, page)
+    # TODO make dirs, if necessary
+    File.open("cache/#{season}/html/#{datestamp}-#{number}.html", 'w') { |f| f.write(page) }
   end
 
   def download_all
@@ -35,7 +34,7 @@ class NhlScrape
     mech = Mechanize.new { |agent| agent.user_agent_alias = 'Mac Safari' }
     page = mech.get(URL.gsub(/YYYY/,season.to_s)+number.to_s)
     # TODO handle http errors, e.g.: Mechanize::ResponseCodeError: 500 => Net::HTTPInternalServerError
-    cache_page(number, page.content, 'html') if cache
+    cache_html(number, page.content) if cache
     page
   end
 
@@ -47,8 +46,8 @@ class NhlScrape
   end
 
   def parse_page(number=1)
-    download_page(number) unless File.exists?("cache/#{season}/#{datestamp}-#{number}.html")
-    file = File.read("cache/#{season}/#{datestamp}-#{number}.html")
+    download_page(number) unless File.exists?("cache/#{season}/html/#{datestamp}-#{number}.html")
+    file = File.read("cache/#{season}/html/#{datestamp}-#{number}.html")
     html = Nokogiri::HTML(file)
     table = html.css('#statsTableGoop #roundedBoxaStats table tr')
     players = []

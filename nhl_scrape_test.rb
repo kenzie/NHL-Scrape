@@ -23,12 +23,12 @@ class NhlScrapeTest < Test::Unit::TestCase
 
   def test_download_page_1
     @s.download_page(1)
-    assert File.exists?("cache/#{@s.season}/#{@s.datestamp}-1.html")
+    assert File.exists?("cache/#{@s.season}/html/#{@s.datestamp}-1.html")
   end
   
   def test_download_all
     @s.download_all
-    assert File.exists?("cache/#{@s.season}/#{@s.datestamp}-#{@s.pages}.html")
+    assert File.exists?("cache/#{@s.season}/html/#{@s.datestamp}-#{@s.pages}.html")
   end
 
   def test_parse_stats_page_1
