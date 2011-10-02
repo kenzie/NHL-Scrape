@@ -12,6 +12,7 @@ class NhlScrape
     @season     = season.to_i
     @pages      = count_pages
     @datestamp  = Time.now.strftime('%Y%m%d')
+    FileUtils.mkpath("cache/#{season}/html")
   end
 
   def count_pages
@@ -20,7 +21,6 @@ class NhlScrape
   end
 
   def cache_html(number, page)
-    FileUtils.mkpath("cache/#{season}/html")
     File.open("cache/#{season}/html/#{datestamp}-#{number}.html", 'w') { |f| f.write(page) }
   end
 
