@@ -20,7 +20,7 @@ class NhlScrape
   end
 
   def cache_html(number, page)
-    # TODO make dirs, if necessary
+    FileUtils.mkpath("cache/#{season}/html")
     File.open("cache/#{season}/html/#{datestamp}-#{number}.html", 'w') { |f| f.write(page) }
   end
 
@@ -48,13 +48,12 @@ class NhlScrape
     download_page(number) unless File.exists?("cache/#{season}/html/#{datestamp}-#{number}.html")
     file = File.read("cache/#{season}/html/#{datestamp}-#{number}.html")
     html = Nokogiri::HTML(file)
-    table = html.css('#statsTableGoop #roundedBoxaStats table tr')
+    table = html.css('table.data.stats tbody tr')
     players = []
     table.each_with_index do |row,index|
-      next if index == 0 # skip header row
       player = []
       player << row.search('a').first['href'].match(/\/ice\/player.htm\?id=(\d+)/)[1]
-      row.css('td.statBox').each do |col|
+      row.css('td').each do |col|
         data = col.content.gsub(/\n|\t/,'')
         player << data unless data.empty?
       end
